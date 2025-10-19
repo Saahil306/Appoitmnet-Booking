@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Appointment Rescheduled</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { background: #ff9800; color: white; padding: 20px; text-align: center; }
+        .content { padding: 20px; background: #f9f9f9; }
+        .footer { text-align: center; padding: 20px; color: #666; }
+        .change-details { background: #fff3e0; padding: 15px; border-radius: 8px; margin: 15px 0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Appointment Rescheduled 🔄</h1>
+        </div>
+        <div class="content">
+            <p>Dear <span th:text="${customerName}">Customer</span>,</p>
+            
+            <p>Your appointment has been successfully rescheduled.</p>
+            
+            <div class="change-details">
+                <h3>Reschedule Details:</h3>
+                <p><strong>Previous Time:</strong> <span th:text="${oldDateTime}">Old Date Time</span></p>
+                <p><strong>New Time:</strong> <span th:text="${newDateTime}">New Date Time</span></p>
+                <p><strong>Provider:</strong> <span th:text="${providerName}">Provider Name</span></p>
+                <p><strong>Service:</strong> <span th:text="${serviceType}">Service Type</span></p>
+            </div>
+            
+            <p>If you have any questions, please contact us.</p>
+        </div>
+        <div class="footer">
+            <p>Booking System Team</p>
+        </div>
+    </div>
+</body>
+</html>

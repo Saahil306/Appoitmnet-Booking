@@ -1,0 +1,10 @@
+package com.appointment.booking.entity;
+
+public enum NotificationType {
+    APPOINTMENT_CONFIRMATION,
+    APPOINTMENT_REMINDER,
+    APPOINTMENT_CANCELLATION,
+    APPOINTMENT_RESCHEDULE,
+    PROVIDER_APPROVAL,
+    SYSTEM_ANNOUNCEMENT
+}
