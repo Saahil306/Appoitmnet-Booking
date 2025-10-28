@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Appointment Confirmation</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { background: #3f51b5; color: white; padding: 20px; text-align: center; }
+        .content { padding: 20px; background: #f9f9f9; }
+        .footer { text-align: center; padding: 20px; color: #666; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Appointment Confirmed! 🎉</h1>
+        </div>
+        <div class="content">
+            <p>Dear <span th:text="${customerName}">Customer</span>,</p>
+            
+            <p>Your appointment with <strong th:text="${providerName}">Provider</strong> 
+            has been successfully booked.</p>
+            
+            <div style="background: white; padding: 15px; border-left: 4px solid #3f51b5; margin: 20px 0;">
+                <strong>Appointment Details:</strong><br>
+                <strong>Service:</strong> <span th:text="${serviceType}">Service Type</span><br>
+                <strong>Duration:</strong> <span th:text="${duration}">Duration</span> minutes<br>
+                <strong>Date & Time:</strong> <span th:text="${appointmentDateTime}">Date Time</span>
+            </div>
+            
+            <p>Please make sure to arrive on time for your appointment.</p>
+            
+            <p>If you need to reschedule or cancel, please visit your dashboard.</p>
+        </div>
+        <div class="footer">
+            <p>Thank you for choosing our service!<br>
+            Booking System Team</p>
+        </div>
+    </div>
+</body>
+</html>

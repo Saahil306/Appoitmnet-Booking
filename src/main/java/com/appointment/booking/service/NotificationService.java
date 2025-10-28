@@ -57,4 +57,10 @@ public class NotificationService {
         
         return notificationRepository.save(notification);
     }
+    
+
+    // NEW OVERLOADED METHOD 
+    public Notification createNotification(Notification notification) {
+        return notificationRepository.save(notification);
+    }
 }
