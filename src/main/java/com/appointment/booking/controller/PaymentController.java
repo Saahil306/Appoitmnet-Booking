@@ -17,7 +17,7 @@ public class PaymentController {
     @Autowired
     private PaymentService paymentService;
     
-    // Create payment for appointment
+    
     @PostMapping("/create")
     public ResponseEntity<?> createPayment(@RequestBody CreatePaymentRequest request) {
         try {
@@ -33,7 +33,7 @@ public class PaymentController {
         }
     }
     
-    // Process payment
+   
     @PostMapping("/process")
     public ResponseEntity<?> processPayment(@RequestBody ProcessPaymentRequest request) {
         try {
@@ -50,7 +50,7 @@ public class PaymentController {
         }
     }
     
-    // Get payment by ID
+    
     @GetMapping("/{id}")
     public ResponseEntity<?> getPaymentById(@PathVariable Long id) {
         try {
@@ -63,7 +63,7 @@ public class PaymentController {
         }
     }
     
-    // Get customer payments
+    
     @GetMapping("/customer/{customerId}")
     public ResponseEntity<?> getCustomerPayments(@PathVariable Long customerId) {
         try {
@@ -76,7 +76,7 @@ public class PaymentController {
         }
     }
     
-    // Get provider payments and earnings
+    
     @GetMapping("/provider/{providerId}")
     public ResponseEntity<?> getProviderPayments(@PathVariable Long providerId) {
         try {
@@ -95,7 +95,7 @@ public class PaymentController {
         }
     }
     
-    // Get payment statistics (for admin)
+    
     @GetMapping("/statistics")
     public ResponseEntity<?> getPaymentStatistics() {
         try {
@@ -108,7 +108,7 @@ public class PaymentController {
         }
     }
     
-    // Request DTOs
+   
     public static class CreatePaymentRequest {
         private Long appointmentId;
         private Double amount;

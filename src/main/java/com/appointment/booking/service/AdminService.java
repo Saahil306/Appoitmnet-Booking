@@ -31,7 +31,7 @@ public class AdminService {
     @Autowired
     private RatingRepository ratingRepository;
 
-    // Approve service provider
+    
     public ServiceProvider approveServiceProvider(Long providerId) {
         ServiceProvider provider = serviceProviderRepository.findById(providerId)
                 .orElseThrow(() -> new RuntimeException("Service provider not found"));
@@ -40,7 +40,7 @@ public class AdminService {
         return serviceProviderRepository.save(provider);
     }
     
-    // Reject service provider
+    
     public void rejectServiceProvider(Long providerId) {
         ServiceProvider provider = serviceProviderRepository.findById(providerId)
                 .orElseThrow(() -> new RuntimeException("Service provider not found"));
@@ -48,36 +48,36 @@ public class AdminService {
         serviceProviderRepository.delete(provider);
     }
     
-    // Get pending service providers
+    
     public List<ServiceProvider> getPendingProviders() {
         return serviceProviderRepository.findByApprovedFalse();
     }
     
-    // Get all users
+  
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
     
-    // Get system statistics
+    
     public SystemStats getSystemStats() {
         long totalUsers = userRepository.count();
         long totalAppointments = appointmentRepository.count();
         long totalProviders = serviceProviderRepository.count();
         long pendingProviders = serviceProviderRepository.findByApprovedFalse().size();
         
-        // ADD RATING STATS
+        
         Long totalRatings = ratingRepository.getTotalRatingCount();
         Double averageRating = ratingRepository.findOverallAverageRating();
         
         return new SystemStats(totalUsers, totalAppointments, totalProviders, pendingProviders, totalRatings, averageRating);
     }
 
-    // Get all ratings across the platform
+  
     public List<Rating> getAllRatings() {
         return ratingRepository.findAllByOrderByCreatedAtDesc();
     }
 
-    // Search ratings
+    
     public List<Rating> searchRatings(String searchTerm) {
         if (searchTerm == null || searchTerm.trim().isEmpty()) {
             return ratingRepository.findAllByOrderByCreatedAtDesc();
@@ -85,7 +85,7 @@ public class AdminService {
         return ratingRepository.searchRatings(searchTerm.trim());
     }
 
-    // Get rating statistics
+    
     public Map<String, Object> getRatingStatistics() {
         Map<String, Object> stats = new HashMap<>();
         
@@ -95,7 +95,7 @@ public class AdminService {
         stats.put("totalRatings", totalRatings != null ? totalRatings : 0);
         stats.put("averageRating", averageRating != null ? Math.round(averageRating * 10.0) / 10.0 : 0.0);
         
-        // Rating distribution
+        
         List<Rating> allRatings = ratingRepository.findAll();
         Map<Integer, Long> ratingDistribution = new HashMap<>();
         for (int i = 1; i <= 5; i++) {
@@ -108,7 +108,7 @@ public class AdminService {
         return stats;
     }
 
-    // Search users with advanced filters - FIXED VERSION
+    
     public List<User> searchUsers(String searchTerm, String role, Boolean active) {
         List<User> allUsers = userRepository.findAll();
         
@@ -144,7 +144,7 @@ public class AdminService {
         return user.isActive() == active;
     }
 
-    // System stats DTO
+    
     public static class SystemStats {
         public long totalUsers;
         public long totalAppointments;

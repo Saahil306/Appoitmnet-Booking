@@ -31,7 +31,7 @@ public class Availability {
     private LocalTime endTime;
     private boolean available;
     
-    // Constructors
+  
     public Availability() {}
     
     public Availability(ServiceProvider serviceProvider, DayOfWeek dayOfWeek, LocalTime startTime, LocalTime endTime) {
@@ -42,7 +42,7 @@ public class Availability {
         this.available = true;
     }
     
-    // Getters and Setters
+    
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
     

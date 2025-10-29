@@ -25,17 +25,17 @@ public class Appointment {
     
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id")
-    @JsonIgnore  // ADD THIS LINE
+    @JsonIgnore  
     private Customer customer;
     
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "provider_id")
-    @JsonIgnore  // ADD THIS LINE
+    @JsonIgnore  
     private ServiceProvider serviceProvider;
     
     private LocalDateTime appointmentDateTime;
     private LocalDateTime endDateTime;
-    private int duration; // in minutes
+    private int duration; 
     
     @Enumerated(EnumType.STRING)
     private AppointmentStatus status;
@@ -45,7 +45,7 @@ public class Appointment {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     
-    // Constructors
+    
     public Appointment() {}
     
     public Appointment(Customer customer, ServiceProvider serviceProvider, LocalDateTime appointmentDateTime, int duration, String serviceType) {
@@ -65,7 +65,7 @@ public class Appointment {
         updatedAt = LocalDateTime.now();
     }
     
-    // Getters and Setters
+    
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
     

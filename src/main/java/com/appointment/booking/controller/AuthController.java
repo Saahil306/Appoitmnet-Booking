@@ -19,7 +19,7 @@ public class AuthController {
     @PostMapping("/register/customer")
     public ResponseEntity<?> registerCustomer(@RequestBody Customer customer) {
         try {
-            // Explicitly set role before saving
+            
             customer.setRole(UserRole.CUSTOMER);
             Customer savedCustomer = userService.registerCustomer(customer);
             return ResponseEntity.ok(savedCustomer);
@@ -33,7 +33,7 @@ public class AuthController {
     @PostMapping("/register/provider")
     public ResponseEntity<?> registerServiceProvider(@RequestBody ServiceProvider serviceProvider) {
         try {
-            // Explicitly set role before saving
+            
             serviceProvider.setRole(UserRole.SERVICE_PROVIDER);
             ServiceProvider savedProvider = userService.registerServiceProvider(serviceProvider);
             return ResponseEntity.ok(savedProvider);
@@ -47,7 +47,7 @@ public class AuthController {
     @PostMapping("/register/admin")
     public ResponseEntity<?> registerAdmin(@RequestBody Admin admin) {
         try {
-            // Explicitly set role before saving
+            
             admin.setRole(UserRole.ADMIN);
             Admin savedAdmin = userService.registerAdmin(admin);
             return ResponseEntity.ok(savedAdmin);
@@ -77,7 +77,7 @@ public class AuthController {
         private String email;
         private String password;
         
-        // Getters and Setters
+       
         public String getEmail() { return email; }
         public void setEmail(String email) { this.email = email; }
         public String getPassword() { return password; }

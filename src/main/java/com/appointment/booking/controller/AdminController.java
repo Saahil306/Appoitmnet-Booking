@@ -39,6 +39,7 @@ public class AdminController {
             return ResponseEntity.badRequest().body(response);
         }
     }
+   
     
     @DeleteMapping("/providers/{providerId}/reject")
     public ResponseEntity<?> rejectServiceProvider(@PathVariable Long providerId) {

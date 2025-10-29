@@ -15,7 +15,7 @@ public interface RatingRepository extends JpaRepository<Rating, Long> {
     List<Rating> findByAppointmentId(Long appointmentId);
     boolean existsByAppointmentId(Long appointmentId);
     
-    // ADD THESE METHODS FOR ADMIN
+    
     List<Rating> findAllByOrderByCreatedAtDesc();
     
     @Query("SELECT AVG(r.rating) FROM Rating r")

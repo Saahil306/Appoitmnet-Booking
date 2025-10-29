@@ -8,6 +8,6 @@ import java.util.List;
 @Repository
 public interface ServiceProviderRepository extends JpaRepository<ServiceProvider, Long> {
     List<ServiceProvider> findByApprovedTrue();
-    List<ServiceProvider> findByApprovedFalse();  // YEH NAYA METHOD
+    List<ServiceProvider> findByApprovedFalse(); 
     List<ServiceProvider> findByServiceTypeAndApprovedTrue(String serviceType);
 }

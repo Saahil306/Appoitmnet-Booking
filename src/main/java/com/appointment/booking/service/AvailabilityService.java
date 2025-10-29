@@ -22,49 +22,49 @@ public class AvailabilityService {
     @Autowired
     private UserService userService;
     
-    // Set availability for provider - FIXED VERSION
+   
     public List<Availability> setAvailability(Long providerId, List<Availability> availabilities) {
         ServiceProvider provider = (ServiceProvider) userService.getUserById(providerId);
         
-        // Get existing availabilities
+        
         List<Availability> existingAvailabilities = availabilityRepository.findByServiceProvider(provider);
         System.out.println("Found " + existingAvailabilities.size() + " existing availabilities to delete");
         
-        // Delete existing availabilities
+       
         if (!existingAvailabilities.isEmpty()) {
             availabilityRepository.deleteAll(existingAvailabilities);
             availabilityRepository.flush(); // Force immediate delete
             System.out.println("Deleted existing availabilities");
         }
         
-        // Set provider for each availability slot
+       
         for (Availability availability : availabilities) {
             availability.setServiceProvider(provider);
             availability.setId(null); // Ensure new entities are created
         }
         
-        // Save new availabilities
+        
         List<Availability> savedAvailabilities = availabilityRepository.saveAll(availabilities);
         System.out.println("Saved " + savedAvailabilities.size() + " new availabilities");
         
         return savedAvailabilities;
     }
     
-    // Get provider availability
+    
     public List<Availability> getProviderAvailability(Long providerId) {
         ServiceProvider provider = (ServiceProvider) userService.getUserById(providerId);
         return availabilityRepository.findByServiceProvider(provider);
     }
     
-    // ✅ IMPROVED: Check if provider is available at specific date/time
+    
     public boolean isProviderAvailable(Long providerId, LocalDateTime requestedDateTime, int duration) {
         try {
             ServiceProvider provider = (ServiceProvider) userService.getUserById(providerId);
             
-            // Get day of week from requested date
+            
             DayOfWeek dayOfWeek = requestedDateTime.getDayOfWeek();
             
-            // Get provider's availability for this day
+            
             List<Availability> dayAvailabilities = availabilityRepository.findByServiceProviderAndDayOfWeek(provider, dayOfWeek);
             
             System.out.println("Checking availability for " + dayOfWeek + ": " + dayAvailabilities.size() + " slots found");
@@ -74,14 +74,14 @@ public class AvailabilityService {
                 return false;
             }
 
-            // Convert requested time to LocalTime
+            
             LocalTime requestedTime = requestedDateTime.toLocalTime();
             LocalTime requestedEndTime = requestedTime.plusMinutes(duration);
 
-            // Check if requested time falls within any available slot
+            
             for (Availability availability : dayAvailabilities) {
                 if (!availability.isAvailable()) {
-                    continue; // Skip unavailable slots
+                    continue; 
                 }
                 
                 LocalTime slotStart = availability.getStartTime();
@@ -89,7 +89,7 @@ public class AvailabilityService {
 
                 System.out.println("Checking slot: " + slotStart + " - " + slotEnd + " for request: " + requestedTime + " - " + requestedEndTime);
 
-                // Check if requested time is within this availability slot
+                
                 boolean isWithinSlot = !requestedTime.isBefore(slotStart) && !requestedEndTime.isAfter(slotEnd);
                 
                 if (isWithinSlot) {
@@ -108,7 +108,7 @@ public class AvailabilityService {
         }
     }
     
-    // ✅ NEW: Get available time slots for a provider on specific date
+    
     public List<String> getAvailableTimeSlots(Long providerId, LocalDateTime date) {
         ServiceProvider provider = (ServiceProvider) userService.getUserById(providerId);
         DayOfWeek dayOfWeek = date.getDayOfWeek();

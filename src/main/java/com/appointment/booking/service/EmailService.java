@@ -22,7 +22,7 @@ public class EmailService {
     @Autowired
     private TemplateEngine templateEngine;
 
-    // Send simple email
+   
     public void sendSimpleEmail(String to, String subject, String text) {
         try {
             MimeMessage message = mailSender.createMimeMessage();
@@ -39,7 +39,7 @@ public class EmailService {
         }
     }
 
-    // Send templated email
+    
     public void sendTemplatedEmail(String to, String subject, String templateName, 
                                    Map<String, Object> variables) {
         try {
@@ -54,7 +54,7 @@ public class EmailService {
         }
     }
 
-    // Helper method to create maps for Java 8
+    
     private Map<String, Object> createVariables(Object... keyValuePairs) {
         Map<String, Object> variables = new HashMap<>();
         for (int i = 0; i < keyValuePairs.length; i += 2) {
@@ -63,7 +63,7 @@ public class EmailService {
         return variables;
     }
 
-    // Appointment specific emails - FIXED FOR JAVA 8
+    
     public void sendAppointmentConfirmation(String customerEmail, String customerName, 
                                            String providerName, String appointmentDateTime,
                                            String serviceType, int duration) {
@@ -108,7 +108,7 @@ public class EmailService {
             variables);
     }
 
-    // Provider approval email
+    
     public void sendProviderApprovalEmail(String providerEmail, String providerName) {
         Map<String, Object> variables = new HashMap<>();
         variables.put("providerName", providerName);
@@ -119,7 +119,7 @@ public class EmailService {
             variables);
     }
     
-    // New appointment notification to provider
+    
     public void sendNewAppointmentNotification(String providerEmail, String providerName, 
                                              String customerName, String appointmentDateTime, String serviceType) {
         Map<String, Object> variables = new HashMap<>();

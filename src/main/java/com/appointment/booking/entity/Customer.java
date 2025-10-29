@@ -20,7 +20,7 @@ public class Customer extends User {
     private String zipCode;
     
     @OneToMany(mappedBy = "customer")
-    @JsonIgnore  // ADD THIS LINE
+    @JsonIgnore  
     private List<Appointment> appointments = new ArrayList<>();
     
     public Customer() {}
@@ -30,7 +30,7 @@ public class Customer extends User {
     }
     
     
-    // Getters and Setters
+    
     public String getAddress() { return address; }
     public void setAddress(String address) { this.address = address; }
     

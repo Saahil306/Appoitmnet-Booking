@@ -77,7 +77,7 @@ public class RatingController {
         }
     }
 
-    // Request DTO
+   
     public static class SubmitRatingRequest {
         private Long customerId;
         private Long providerId;
@@ -85,7 +85,7 @@ public class RatingController {
         private Integer rating;
         private String comment;
 
-        // Getters and Setters
+       
         public Long getCustomerId() { return customerId; }
         public void setCustomerId(Long customerId) { this.customerId = customerId; }
 

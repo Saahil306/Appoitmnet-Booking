@@ -28,7 +28,7 @@ public class Payment {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     
-    // Constructors
+    
     public Payment() {
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
@@ -41,7 +41,7 @@ public class Payment {
         this.amount = amount;
     }
     
-    // Getters and Setters
+    
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
     

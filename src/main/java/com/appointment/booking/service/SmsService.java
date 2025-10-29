@@ -21,9 +21,9 @@ public class SmsService {
     @Value("${twilio.phone.number}")
     private String fromPhoneNumber;
 
-    // Initialize Twilio
+   
     public SmsService() {
-        // Constructor mein initialize nahi karenge, @PostUse karenge
+        
     }
 
     @PostConstruct
@@ -36,10 +36,10 @@ public class SmsService {
         }
     }
 
-    // Send simple SMS
+    
     public void sendSms(String toPhoneNumber, String messageBody) {
         try {
-            // Phone number format ensure karo
+            
             String formattedTo = formatPhoneNumber(toPhoneNumber);
             
             Message message = Message.creator(
@@ -54,11 +54,11 @@ public class SmsService {
             
         } catch (Exception e) {
             System.err.println("Failed to send SMS: " + e.getMessage());
-            // Don't throw exception, log only
+            
         }
     }
 
-    // Appointment specific SMS methods
+    
     public void sendAppointmentConfirmationSms(String customerPhone, String customerName, 
                                               String providerName, String appointmentDateTime) {
         String message = String.format(
@@ -95,7 +95,7 @@ public class SmsService {
         sendSms(customerPhone, message);
     }
 
-    // Provider notifications
+    
     public void sendNewAppointmentSmsToProvider(String providerPhone, String providerName,
                                                String customerName, String appointmentDateTime) {
         String message = String.format(
@@ -105,14 +105,14 @@ public class SmsService {
         sendSms(providerPhone, message);
     }
 
-    // Phone number formatting helper
+   
     private String formatPhoneNumber(String phoneNumber) {
-        // Remove any non-digit characters
+       
         String digitsOnly = phoneNumber.replaceAll("[^0-9]", "");
         
-        // If number doesn't start with +, add country code
+        
         if (!phoneNumber.startsWith("+")) {
-            // Assume Indian number if no country code
+            
             if (digitsOnly.length() == 10) {
                 return "+91" + digitsOnly;
             }
@@ -121,13 +121,13 @@ public class SmsService {
         return phoneNumber;
     }
 
-    // Test method
+   
     public void sendTestSms(String toPhoneNumber) {
         String testMessage = "Test SMS from Appointment Booking System. If you received this, SMS is working!";
         sendSms(toPhoneNumber, testMessage);
     }
     
- // SmsService mein yeh method add karo:
+ 
     public void sendAppointmentCompletionSms(String customerPhone, String customerName,
                                             String providerName) {
         String message = String.format(

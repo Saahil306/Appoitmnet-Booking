@@ -16,19 +16,19 @@ public class NotificationService {
     @Autowired
     private UserService userService;
     
-    // Get user notifications
+    
     public List<Notification> getUserNotifications(Long userId) {
         User user = userService.getUserById(userId);
         return notificationRepository.findByUserOrderByCreatedAtDesc(user);
     }
     
-    // Get unread notifications count
+   
     public long getUnreadNotificationCount(Long userId) {
         User user = userService.getUserById(userId);
         return notificationRepository.countByUserAndReadFalse(user);
     }
     
-    // Mark notification as read
+   
     public Notification markAsRead(Long notificationId) {
         Notification notification = notificationRepository.findById(notificationId)
                 .orElseThrow(() -> new RuntimeException("Notification not found"));
@@ -37,7 +37,7 @@ public class NotificationService {
         return notificationRepository.save(notification);
     }
     
-    // Mark all notifications as read
+    
     public void markAllAsRead(Long userId) {
         User user = userService.getUserById(userId);
         List<Notification> notifications = notificationRepository.findByUserAndReadFalseOrderByCreatedAtDesc(user);
@@ -49,7 +49,7 @@ public class NotificationService {
         notificationRepository.saveAll(notifications);
     }
     
-    // Create notification
+    
     public Notification createNotification(Long userId, String title, String message, String type) {
         User user = userService.getUserById(userId);
         Notification notification = new Notification(user, title, message, 
@@ -59,7 +59,7 @@ public class NotificationService {
     }
     
 
-    // NEW OVERLOADED METHOD 
+   
     public Notification createNotification(Notification notification) {
         return notificationRepository.save(notification);
     }

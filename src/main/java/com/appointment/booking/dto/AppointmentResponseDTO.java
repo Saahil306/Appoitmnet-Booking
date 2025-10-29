@@ -18,7 +18,7 @@ public class AppointmentResponseDTO {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    // Constructors
+   
     public AppointmentResponseDTO() {}
 
     public AppointmentResponseDTO(Long id, Long customerId, String customerName, Long providerId, 
@@ -40,7 +40,7 @@ public class AppointmentResponseDTO {
         this.updatedAt = updatedAt;
     }
 
-    // Getters and Setters
+   
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
     

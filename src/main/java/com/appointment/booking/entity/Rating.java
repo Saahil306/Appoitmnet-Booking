@@ -40,7 +40,7 @@ public class Rating {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    // Constructors
+    
     public Rating() {}
 
     public Rating(Customer customer, ServiceProvider serviceProvider, Appointment appointment, Integer rating, String comment) {
@@ -58,7 +58,7 @@ public class Rating {
         updatedAt = LocalDateTime.now();
     }
 
-    // Getters and Setters
+    
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 

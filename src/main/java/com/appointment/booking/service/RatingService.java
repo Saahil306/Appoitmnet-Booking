@@ -32,18 +32,18 @@ public class RatingService {
         ServiceProvider provider = (ServiceProvider) userService.getUserById(providerId);
         Appointment appointment = appointmentService.getAppointmentEntityById(appointmentId);
 
-        // Check if appointment belongs to this customer and provider
+       
         if (!appointment.getCustomer().getId().equals(customerId) || 
             !appointment.getServiceProvider().getId().equals(providerId)) {
             throw new RuntimeException("Invalid appointment for rating");
         }
 
-        // Check if appointment is completed
+        
         if (appointment.getStatus() != AppointmentStatus.COMPLETED) {
             throw new RuntimeException("Can only rate completed appointments");
         }
 
-        // Check if already rated
+       
         if (ratingRepository.existsByAppointmentId(appointmentId)) {
             throw new RuntimeException("Appointment already rated");
         }
@@ -52,35 +52,34 @@ public class RatingService {
         return ratingRepository.save(newRating);
     }
 
-    // Get ratings for a provider
+   
     public List<Rating> getProviderRatings(Long providerId) {
         ServiceProvider provider = (ServiceProvider) userService.getUserById(providerId);
         return ratingRepository.findByServiceProviderOrderByCreatedAtDesc(provider);
     }
 
-    // Get average rating for a provider
+    
     public Double getProviderAverageRating(Long providerId) {
         ServiceProvider provider = (ServiceProvider) userService.getUserById(providerId);
         Double average = ratingRepository.findAverageRatingByServiceProvider(provider);
-        return average != null ? Math.round(average * 10.0) / 10.0 : 0.0; // Round to 1 decimal
+        return average != null ? Math.round(average * 10.0) / 10.0 : 0.0; 
     }
 
-    // Get rating count for a provider
+    
     public Long getProviderRatingCount(Long providerId) {
         ServiceProvider provider = (ServiceProvider) userService.getUserById(providerId);
         return ratingRepository.countByServiceProvider(provider);
     }
 
-    // Get rating by appointment
+    
     public Rating getRatingByAppointment(Long appointmentId) {
         List<Rating> ratings = ratingRepository.findByAppointmentId(appointmentId);
         return ratings.isEmpty() ? null : ratings.get(0);
     }
 
-    // Helper method for appointment service
+    
     public Appointment getAppointmentEntityById(Long appointmentId) {
-        // This method should be in AppointmentService, adding here for completeness
-        // You'll need to add this method to your AppointmentService
-        return null; // Placeholder
+        
+        return null; 
     }
 }

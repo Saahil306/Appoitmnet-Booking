@@ -39,7 +39,7 @@ public class UserService {
         return userRepository.save(user);
     }
     
-    // Customer Registration
+    
     public Customer registerCustomer(Customer customer) {
         if (userRepository.existsByEmail(customer.getEmail())) {
             throw new RuntimeException("Email already exists");
@@ -47,7 +47,7 @@ public class UserService {
         return customerRepository.save(customer);
     }
     
-    // Service Provider Registration
+    
     public ServiceProvider registerServiceProvider(ServiceProvider serviceProvider) {
         if (userRepository.existsByEmail(serviceProvider.getEmail())) {
             throw new RuntimeException("Email already exists");
@@ -55,7 +55,7 @@ public class UserService {
         return serviceProviderRepository.save(serviceProvider);
     }
     
-    // Admin Registration
+    
     public Admin registerAdmin(Admin admin) {
         if (userRepository.existsByEmail(admin.getEmail())) {
             throw new RuntimeException("Email already exists");
@@ -63,7 +63,7 @@ public class UserService {
         return adminRepository.save(admin);
     }
     
-    // User Login
+    
     public User login(String email, String password) {
         Optional<User> user = userRepository.findByEmail(email);
         if (user.isPresent() && user.get().getPassword().equals(password) && user.get().isActive()) {
@@ -72,13 +72,13 @@ public class UserService {
         throw new RuntimeException("Invalid credentials or inactive account");
     }
     
-    // Get user by ID
+    
     public User getUserById(Long id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found"));
     }
     
-    // Update user profile
+   
     public User updateUser(Long id, User userDetails) {
         User user = getUserById(id);
         user.setFirstName(userDetails.getFirstName());
@@ -87,35 +87,35 @@ public class UserService {
         return userRepository.save(user);
     }
     
-    // Get all service providers
+    
     public List<ServiceProvider> getAllServiceProviders() {
         return serviceProviderRepository.findByApprovedTrue();
     }
     
-    // Get service providers by type
+   
     public List<ServiceProvider> getServiceProvidersByType(String serviceType) {
         return serviceProviderRepository.findByServiceTypeAndApprovedTrue(serviceType);
     }
     
-    // Deactivate user
+    
     public void deactivateUser(Long id) {
         User user = getUserById(id);
         user.setActive(false);
         userRepository.save(user);
     }
     
-    // Activate user
+    
     public void activateUser(Long id) {
         User user = getUserById(id);
         user.setActive(true);
         userRepository.save(user);
     }
     
-    // Advanced search for service providers
+    
     public List<ServiceProvider> searchServiceProviders(String searchTerm, String serviceType, Boolean availableToday) {
         List<ServiceProvider> providers = serviceProviderRepository.findByApprovedTrue();
         
-        // Apply filters
+        
         return providers.stream()
                 .filter(provider -> matchesSearchTerm(provider, searchTerm))
                 .filter(provider -> matchesServiceType(provider, serviceType))
@@ -141,7 +141,7 @@ public class UserService {
         return provider.getServiceType().equalsIgnoreCase(serviceType);
     }
 
-    // Get distinct service types for filter dropdown
+    
     public List<String> getDistinctServiceTypes() {
         return serviceProviderRepository.findByApprovedTrue()
                 .stream()

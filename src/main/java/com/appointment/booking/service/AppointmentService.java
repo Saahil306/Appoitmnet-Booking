@@ -37,7 +37,7 @@ public class AppointmentService {
     @Autowired
     private SmsService smsService;
 
-    // Book appointment - WITH IMPROVED AVAILABILITY CHECK
+    
     public AppointmentResponseDTO bookAppointment(Long customerId, Long providerId, LocalDateTime appointmentDateTime, int duration, String serviceType) {
         Customer customer = (Customer) userService.getUserById(customerId);
         ServiceProvider provider = (ServiceProvider) userService.getUserById(providerId);
@@ -46,9 +46,9 @@ public class AppointmentService {
             throw new RuntimeException("Service provider is not approved");
         }
 
-        // ✅ IMPROVED: Use AvailabilityService for availability check
+        
         if (!availabilityService.isProviderAvailable(providerId, appointmentDateTime, duration)) {
-            // Get available slots for better error message
+            
             List<String> availableSlots = availabilityService.getAvailableTimeSlots(providerId, appointmentDateTime);
             String errorMsg = "Time slot not available. Please choose a different time. ";
             
@@ -62,7 +62,7 @@ public class AppointmentService {
             throw new RuntimeException(errorMsg);
         }
         
-        // Check for conflicting appointments
+        
         List<Appointment> conflicts = appointmentRepository.findByServiceProviderAndAppointmentDateTimeBetween(
             provider, appointmentDateTime, appointmentDateTime.plusMinutes(duration));
         
@@ -73,12 +73,12 @@ public class AppointmentService {
         Appointment appointment = new Appointment(customer, provider, appointmentDateTime, duration, serviceType);
         Appointment savedAppointment = appointmentRepository.save(appointment);
         
-        // Send notification
+         
         sendAppointmentNotification(customer, provider, savedAppointment, "APPOINTMENT_BOOKED");
         
         String formattedDateTime = formatDateTimeForEmail(appointmentDateTime);
         
-        // ✅ SEND CONFIRMATION EMAIL
+       
         try {
             emailService.sendAppointmentConfirmation(
                 customer.getEmail(),
@@ -89,7 +89,7 @@ public class AppointmentService {
                 duration
             );
             
-            // Also send email to provider
+            
             emailService.sendNewAppointmentNotification(
                 provider.getEmail(),
                 provider.getFirstName() + " " + provider.getLastName(),
@@ -102,9 +102,9 @@ public class AppointmentService {
             System.err.println("Failed to send confirmation email: " + e.getMessage());
         }
         
-        // ✅ SEND CONFIRMATION SMS
+       
         try {
-            // Customer ko SMS
+            
             smsService.sendAppointmentConfirmationSms(
                 customer.getPhone(),
                 customer.getFirstName() + " " + customer.getLastName(),
@@ -112,7 +112,7 @@ public class AppointmentService {
                 formattedDateTime
             );
             
-            // Provider ko SMS
+            
             smsService.sendNewAppointmentSmsToProvider(
                 provider.getPhone(),
                 provider.getFirstName() + " " + provider.getLastName(),
@@ -127,7 +127,7 @@ public class AppointmentService {
         return convertToDTO(savedAppointment);
     }
 
-    // Get customer appointments - DTO return karo
+    
     public List<AppointmentResponseDTO> getCustomerAppointments(Long customerId) {
         Customer customer = (Customer) userService.getUserById(customerId);
         List<Appointment> appointments = appointmentRepository.findByCustomerOrderByAppointmentDateTimeDesc(customer);
@@ -136,7 +136,7 @@ public class AppointmentService {
                 .collect(Collectors.toList());
     }
     
-    // Get provider appointments - DTO return karo
+   
     public List<AppointmentResponseDTO> getProviderAppointments(Long providerId) {
         ServiceProvider provider = (ServiceProvider) userService.getUserById(providerId);
         List<Appointment> appointments = appointmentRepository.findByServiceProviderOrderByAppointmentDateTimeDesc(provider);
@@ -145,7 +145,7 @@ public class AppointmentService {
                 .collect(Collectors.toList());
     }
     
-    // Convert Appointment to DTO
+    
     private AppointmentResponseDTO convertToDTO(Appointment appointment) {
         return new AppointmentResponseDTO(
             appointment.getId(),
@@ -164,12 +164,12 @@ public class AppointmentService {
         );
     }
     
-    // Reschedule appointment - WITH IMPROVED AVAILABILITY CHECK
+    
     public AppointmentResponseDTO rescheduleAppointment(Long appointmentId, LocalDateTime newDateTime) {
         Appointment appointment = appointmentRepository.findById(appointmentId)
                 .orElseThrow(() -> new RuntimeException("Appointment not found"));
         
-        // ✅ IMPROVED: Use AvailabilityService for availability check
+        
         if (!availabilityService.isProviderAvailable(appointment.getServiceProvider().getId(), newDateTime, appointment.getDuration())) {
             List<String> availableSlots = availabilityService.getAvailableTimeSlots(appointment.getServiceProvider().getId(), newDateTime);
             String errorMsg = "Time slot not available for reschedule. Please choose a different time.";
@@ -181,7 +181,7 @@ public class AppointmentService {
             throw new RuntimeException(errorMsg);
         }
 
-        // Check for conflicts (excluding current appointment)
+       
         List<Appointment> conflicts = appointmentRepository.findByServiceProviderAndAppointmentDateTimeBetween(
             appointment.getServiceProvider(), newDateTime, newDateTime.plusMinutes(appointment.getDuration()));
         
@@ -198,14 +198,14 @@ public class AppointmentService {
         appointment.setStatus(AppointmentStatus.RESCHEDULED);
         Appointment updatedAppointment = appointmentRepository.save(appointment);
         
-        // Send notification
+        
         sendAppointmentNotification(appointment.getCustomer(), appointment.getServiceProvider(), 
                                   updatedAppointment, "APPOINTMENT_RESCHEDULED");
         
         String oldFormattedDateTime = formatDateTimeForEmail(oldDateTime);
         String newFormattedDateTime = formatDateTimeForEmail(newDateTime);
         
-        // ✅ SEND RESCHEDULE EMAIL
+        
         try {
             emailService.sendAppointmentReschedule(
                 appointment.getCustomer().getEmail(),
@@ -220,7 +220,7 @@ public class AppointmentService {
             System.err.println("Failed to send reschedule email: " + e.getMessage());
         }
         
-        // ✅ SEND RESCHEDULE SMS
+        
         try {
             smsService.sendAppointmentRescheduleSms(
                 appointment.getCustomer().getPhone(),
@@ -236,7 +236,7 @@ public class AppointmentService {
         return convertToDTO(updatedAppointment);
     }
     
-    // Cancel appointment
+    
     public AppointmentResponseDTO cancelAppointment(Long appointmentId) {
         Appointment appointment = appointmentRepository.findById(appointmentId)
                 .orElseThrow(() -> new RuntimeException("Appointment not found"));
@@ -244,13 +244,13 @@ public class AppointmentService {
         appointment.setStatus(AppointmentStatus.CANCELLED);
         Appointment cancelledAppointment = appointmentRepository.save(appointment);
         
-        // Send notification
+       
         sendAppointmentNotification(appointment.getCustomer(), appointment.getServiceProvider(), 
                                   cancelledAppointment, "APPOINTMENT_CANCELLED");
         
         String formattedDateTime = formatDateTimeForEmail(appointment.getAppointmentDateTime());
         
-        // ✅ SEND CANCELLATION EMAIL
+        
         try {
             emailService.sendAppointmentCancellation(
                 appointment.getCustomer().getEmail(),
@@ -260,7 +260,7 @@ public class AppointmentService {
                 appointment.getServiceType()
             );
             
-            // Also notify provider
+            
             emailService.sendAppointmentCancellationToProvider(
                 appointment.getServiceProvider().getEmail(),
                 appointment.getServiceProvider().getFirstName() + " " + appointment.getServiceProvider().getLastName(),
@@ -273,7 +273,7 @@ public class AppointmentService {
             System.err.println("Failed to send cancellation email: " + e.getMessage());
         }
         
-        // ✅ SEND CANCELLATION SMS
+       
         try {
             smsService.sendAppointmentCancellationSms(
                 appointment.getCustomer().getPhone(),
@@ -289,7 +289,7 @@ public class AppointmentService {
         return convertToDTO(cancelledAppointment);
     }
     
-    // Update appointment status
+    
     public AppointmentResponseDTO updateAppointmentStatus(Long appointmentId, AppointmentStatus status) {
         Appointment appointment = appointmentRepository.findById(appointmentId)
                 .orElseThrow(() -> new RuntimeException("Appointment not found"));
@@ -298,13 +298,13 @@ public class AppointmentService {
         appointment.setStatus(status);
         Appointment updatedAppointment = appointmentRepository.save(appointment);
         
-        // Send notification
+       
         sendAppointmentNotification(appointment.getCustomer(), appointment.getServiceProvider(), 
                                   updatedAppointment, "APPOINTMENT_STATUS_UPDATED");
         
         String formattedDateTime = formatDateTimeForEmail(appointment.getAppointmentDateTime());
         
-        // ✅ SEND STATUS UPDATE EMAIL
+        
         try {
             if (status == AppointmentStatus.CONFIRMED && oldStatus == AppointmentStatus.PENDING) {
                 emailService.sendAppointmentConfirmation(
@@ -324,7 +324,7 @@ public class AppointmentService {
                     appointment.getServiceType()
                 );
                 
-                // ✅ SEND COMPLETION SMS
+               
                 try {
                     smsService.sendAppointmentCompletionSms(
                         appointment.getCustomer().getPhone(),
@@ -343,14 +343,14 @@ public class AppointmentService {
         return convertToDTO(updatedAppointment);
     }
     
-    // Get appointment by ID
+   
     public AppointmentResponseDTO getAppointmentById(Long appointmentId) {
         Appointment appointment = appointmentRepository.findById(appointmentId)
                 .orElseThrow(() -> new RuntimeException("Appointment not found"));
         return convertToDTO(appointment);
     }
     
-    // Get appointments by status
+    
     public List<AppointmentResponseDTO> getAppointmentsByStatus(AppointmentStatus status) {
         List<Appointment> appointments = appointmentRepository.findByStatus(status);
         return appointments.stream()
@@ -358,7 +358,7 @@ public class AppointmentService {
                 .collect(Collectors.toList());
     }
     
-    // PRIVATE METHOD TO SEND NOTIFICATIONS
+   
     private void sendAppointmentNotification(Customer customer, ServiceProvider provider, 
                                            Appointment appointment, String type) {
         String message = "";
@@ -386,18 +386,17 @@ public class AppointmentService {
                 break;
         }
         
-        // Notify customer
+      
         Notification customerNotification = new Notification(customer, title, message, 
             NotificationType.APPOINTMENT_CONFIRMATION);
         notificationRepository.save(customerNotification);
         
-        // Notify provider
         Notification providerNotification = new Notification(provider, title, message, 
             NotificationType.APPOINTMENT_CONFIRMATION);
         notificationRepository.save(providerNotification);
     }
 
-    // ✅ METHOD: Format datetime for email/SMS
+    
     private String formatDateTimeForEmail(LocalDateTime dateTime) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEEE, MMMM d, yyyy 'at' h:mm a");
         return dateTime.format(formatter);
@@ -408,7 +407,7 @@ public class AppointmentService {
                 .orElseThrow(() -> new RuntimeException("Appointment not found"));
     }
 
-    // ✅ NEW METHOD: Check availability for specific provider and time
+    
     public String checkAvailability(Long providerId, LocalDateTime dateTime, int duration) {
         try {
             boolean isAvailable = availabilityService.isProviderAvailable(providerId, dateTime, duration);

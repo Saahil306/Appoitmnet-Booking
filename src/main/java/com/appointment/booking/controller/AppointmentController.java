@@ -29,7 +29,7 @@ public class AppointmentController {
     @Autowired
     private AppointmentService appointmentService;
     
- // All methods ke return types Appointment se AppointmentResponseDTO change karo
+ 
     @PostMapping("/book")
     public ResponseEntity<?> bookAppointment(@RequestBody BookAppointmentRequest request) {
         try {
@@ -142,7 +142,7 @@ public class AppointmentController {
         }
     }
     
-    // Request DTOs
+  
     public static class BookAppointmentRequest {
         private Long customerId;
         private Long providerId;
@@ -150,7 +150,7 @@ public class AppointmentController {
         private int duration;
         private String serviceType;
         
-        // Getters and Setters
+        
         public Long getCustomerId() { return customerId; }
         public void setCustomerId(Long customerId) { this.customerId = customerId; }
         public Long getProviderId() { return providerId; }
